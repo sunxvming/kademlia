@@ -1,0 +1,245 @@
+## 程序启动
+参数说明：
+```
+Flags:
+-i [char*] The ip to connect to on the remote host
+-p [ uint] lower-case,The port to connect to on the remote host
+-P [ uint] upper-case,The port to use on this host
+-x [     ] Use a private network
+-l [ uint] Set the log level:
+	0 - Log nothing
+	1 - Log only to stdout <default>
+	2 - Log only to file
+	3 - Log everywhere
+-h [     ] Print this wonderful help :)
+
+# 启动
+./kad -P 6000 -x
+
+./kad -p 6000 -P 6001 -i 192.168.1.11 -x
+./kad -p 6000 -P 6002 -i 192.168.1.11 -x
+```
+
+
+scp ./kad root@192.168.1.12:/root/k2/
+
+
+## todo
+curl获得本机的外网ip
+
+
+## 所有程
+udp监听线程
+    Messenger::init
+处理message队列线程
+处理pendingNodesCleaner
+处理pong回应的pong queue
+处理pong请求超时的
+
+    
+## 程序初始化工作
+Messenger中启动udp监
+创建 Performer 对象，其在构造函数中创建两个线程
+    
+向自己所连接的节点发送find_node消息
+
+初始化菜单，并根据菜单选项执行相应动作
+
+
+
+
+## 主要类说明
+```
+Spinlock
+    自旋锁
+Logger
+    多线程打印日志到屏幕或文件，此方法要加锁，防止打印到一半另一个线程又打印了
+Ip
+    It is essentially a wrapper around the integer representation of an IP
+
+Key
+    generates by node or value
+
+Distance
+    Constructor given two keys
+    
+Node
+    Class used to define a tuple <Ip,port,Key>
+    This class generates a pair <Ip,port> and then append to it the corresponding Key    
+
+Kbucket
+    Class used to store a collection of nodes
+    保存数据结构为：std::list<Node>
+    
+    addNode()
+        节点存在
+            替换，把位置前移
+        节点不存在
+            不满
+                直接加入
+            满
+                ping旧节点
+                    能ping通
+                        移到前边， 这所以这样是因为可以认为这个节点存在的时机更长更加稳定
+                    不能ping通  
+                        删除
+    
+NeighbourManager
+    Class used to store a collection of Kbuckets,相当于一个Routing table，一个路由表由多个Kbucket组成 
+    数据结构为：数组， 自己的节点不存放在k-bucket中,0-bucket中放的是和自己距离为1的key
+    类中还存放了Node myself; 记录自己的节点
+    findKClosestNodes()
+        先找距离相等的，再找远的，再找近的(近的离请求节点的距离可能更远)
+    findClosestNode()
+    insertNode()
+        关键是插入到那个Kbucket中
+
+Message
+    Class used to represent a Message sent across the network
+    reserve 12 bytes for ip、port、flags.
+    Sender node and sender port will be automatically added by the Messenger class upon sending the Message
+    
+Messenger
+    Class used to send and receive messages
+        init() 程序初始化时调用  
+            1.创建线程进行udp监听，循环recvfrom  
+            2.接收到udp网络数据后处理成Message并push到std::queue<Message*>
+            3.通知Performer处理工作线程去处理网络消息 Messenger::getInstance()).cond_var.notify_all()
+            注意：将接收网络消息和处理网络消息分开是典型的用法，这样可以提高网络消息的处理能力
+        sendMessage(const Node node, const Message& msg) 
+            sendto()
+    
+Performer
+    对象创建的时候起了两个线程
+        1.execute   
+            等待queue中的Message，有的话处理协议消息
+            对消息来源的节点进行跟新，即更新k桶：p->neighbours->insertNode(sender);   添加更新sender
+            若消息需要回应的话，根据消息的类型进行回应
+        2.pendingNodesCleaner   
+            清除searchInProgress 调用 SearchNode::clean()的方法
+                清除SearchNode中处于PENDING状态的node
+    startSearch()  寻找key
+    
+    storeTmpMap
+    
+    
+SearchNode
+    Class used to ensure persistence between various FIND_NODE calls
+        findkey:要寻找的key  
+        askme:存着所有请求中的节点
+        addAnswer()   
+            往askme中添加收到的节点
+            askme标记状态，探测过的标记为ACTIVE，刚加进来的为UNKNOWN     UNKNOWN = 0, PENDING = 1, ACTIVE = 2
+            且askme按距离排序
+            askme去重
+            把超过限额的放到reserve中，并删除reserve中UNKNOWN的的节点         
+        queryTo() 
+            若没有状态是UNKNOWN直接返回
+            若有，从askme中选取状态为 UNKNOWN，把其标记为PENDING，记录当时的时机，以备节点超时无响应将其删除掉
+    
+Updater
+    当有新节点时，处理k-bucket中的新旧节点是否替换
+    单例，第一次Updater::getInstance()时创建一个线程scan_queue()
+    scan_queue()
+        从存放PONG的queue中pop，并从 updateNodesMap 中查找node，有的话erase掉
+    checkUpdateBucket()  Kbucket::addNode时触发
+        rpc_ping(oldNode);
+        vars.updateNodesMap.insert(std::pair<Node, Node>(oldNode, newNode));
+        起一个线程等待pong
+        如果超时了就用新节点把旧节点替换掉
+        如果pong来的话scan_queue线程会把updateNodesMap中相应的节点erase掉，此方法就啥也不执行
+```
+   
+
+
+## kad所有协议
+```
+RPC_FIND_NODE 初始化连接节点，并进行节点发现
+    a:main.cpp 
+        向Performer的searchInProgress中添加SearchNode
+        Messenger::getInstance()).sendMessage(gatewaynode, msg)
+    a:发送 RPC_FIND_NODE key为自己的key
+    b:从std::queue<Message*>取Message，并进行处理
+    b:处理 RPC_FIND_NODE
+        findKClosestNodes()
+        返回key(请求者发来的)+查到的node
+    a:查找请求的key的 SearchNode
+        SearchNode addAnswer()
+        SearchNode queryTo()
+        queryTo若查找是否有UNKNOWN的node？
+            有：继续RPC_FIND_NODE
+            无：RPC_FIND_NODE结束
+      
+    如何把自己的k桶填满?
+        初始化的时候一共可以请求最多6*6个节点，即往k桶中最多添加36个(若返回的node不重复的话)
+        之后又节点访问自己时再更新和添加节点
+
+      
+RPC_STORE
+  发起者首先定位 k 个 ID 值最接近 key 的节点
+  发起者对这 k 个节点发起 STORE 操作
+    构造请求协议：RPC_FIND_NODE FLAG_STORE_REQUEST
+    startSearch()
+        先从自己的k桶中findKClosestNodes
+        然后向这些node发送find_node
+    find_node完成后得到最近的6个node，然后再从storeTmpMap中找到key和value，向他们发送rpc_store   RPC_STORE
+    对方接收到RPC_STORE后直接存在自己的filesMap中：p->filesMap.insert(std::make_pair(key,text))
+
+
+find_value
+    先从自己的k桶中findKClosestNodes
+    先查看自己本地有没有myselfHasValue
+    然后发送find_node在全网找KClosestNodes   flag为 FLAG_FIND_VALUE
+    被请求的节点在自己本地找key
+    找到了则标记一个 FLAG_VALUE_FOUND 标记并把key和value发送给请求者
+    请求者接受到后则停止搜索
+
+RPC_PING
+    发送RPC_PING协议
+    对方收到后然后响应
+    
+ 
+
+k-bucket的维护及更新机制
+    每个bucket里的节点都按最后一次接触的时间倒序排列   头最新，尾最旧
+    每次执行四个指令中的任意一个都会触发更新
+    当一个节点与自己接触时，检查它是否在K-bucket中
+        如果在，将它挪到k-bucket列表的头
+        如果不在，PING一下列表最尾的一个节点
+            如果PING通了，将旧节点挪到列表头(说明它比新来的节点稳定)，并丢弃新节点
+            如果PING不通，删除旧节点，并将新节点加入列表？列表的那个位置？
+
+
+K-桶刷新时机
+    1.主动FIND_NODE
+    2.有其他节点访问自己时更新此节点
+    3.PING 定期探测路由表中的每一个节点
+```
+
+
+【边界条件】
+k-bucket中的0-bucket存的是距离为1的node，自己的node不存在k-bucket中
+
+
+
+## 参考链接
+
+- [Academic implementation of the Kademlia protocol, for the Distributed Algorithms course]()
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+

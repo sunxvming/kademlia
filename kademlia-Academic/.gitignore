@@ -1,0 +1,16 @@
+.DS_Store
+*.o
+*.gch
+*.out
+*.exe
+*.app
+*.plist
+Makefile
+*.xcodeproj
+build*/
+.Rhistory
+.dep.inc
+nbproject/
+dist/
+tests/*.cxx
+xct/
