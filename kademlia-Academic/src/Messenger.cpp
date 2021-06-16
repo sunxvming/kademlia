@@ -140,6 +140,7 @@ void Messenger::sendMessage(const Node node, const Message& msg) const
     struct sockaddr_in dest = Messenger::dest;
     dest.sin_addr.s_addr = node.getIp().getIp();//get ip of node in network ord.
     dest.sin_port = htons(node.getPort());
+    // 在消息体的头部加ip、port、flag
     uint32_t* t = (uint32_t*)(msg.text);
     *t = (Messenger::my_ip.getIp());
     *(uint16_t*)(msg.text+4) = htons(Messenger::port_ho);

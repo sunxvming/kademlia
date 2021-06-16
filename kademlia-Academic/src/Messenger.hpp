@@ -204,7 +204,7 @@ public:
 private:
     uint8_t text[512];
     uint8_t flags;
-    short length;   //不包括保留的空间
+    short length;   //消息体的大小，不包括保留的空间,
     Node senderNode;
 
 };

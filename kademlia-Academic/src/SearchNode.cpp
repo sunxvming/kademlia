@@ -129,13 +129,13 @@ int SearchNode::queryTo(Node* answer)
             //not probed, set the iterator so I know I have to ping this one
             if(it->probed == UNKNOWN)
                 break;
-            else //node already probed, but missing answer    is PENDING
+            else //node already probed, but missing answer, the status is PENDING
                 continue;
         }
     }
-    if(check) //completed,  都是ACTIVE，不需要再查了   结束应该如何判断
+    if(check) //completed,  都是ACTIVE，不需要再查了   
         retval = 0;
-    else if(it==askme.end())    //ACTIVE+PENDING
+    else if(it==askme.end())    //ACTIVE + PENDING,也不需要查找了
     {
         retval = -1;
     }

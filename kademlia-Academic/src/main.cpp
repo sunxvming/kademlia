@@ -206,7 +206,7 @@ int kadUI(Performer* p)
             try {
                 uint8_t keyBytes[NBYTE];
                 for (int i = 0; i < NBYTE; i++) {
-                    keyBytes[i] = (uint8_t)(std::stoi(value.substr(i*2 + 2, 2),
+                    keyBytes[i] = (uint8_t)(std::stoi(value.substr(i*2 + 2, 2),   // 0xf93298f3e3a0a9279ad336504e3da760b1f4797c，一个16进制占4比特，两个16进制占一个字节
                                                       nullptr, 16));
                 }
                 Key myKey;

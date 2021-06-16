@@ -30,7 +30,7 @@ void NeighbourManager::printNeighbours()
     {
         if(neighboursArray[i].getSize() > 0)
         {
-            std::cout << "KBUCKET NUMBER " << i << std::endl;
+            std::cout << "KBUCKET NUMBER " << i << std::endl;  //i为节点的距离
         }
         std::list<Node>::const_iterator it;
         for(it = neighboursArray[i].getNodes()->begin();
@@ -61,7 +61,7 @@ void NeighbourManager::findKClosestNodes(const Key* key, Kbucket* bucket,
 {
     Distance dist(*(myself.getKey()), *key);
 
-    int index = dist.getDistance() - 1;    // 数组是从0开始的
+    int index = dist.getDistance() - 1;    // 数组是从0开始的,0保存的是距离为1的
     if(index < 0)
     {
         index = 0; //if I am new, search for nearest neighbours

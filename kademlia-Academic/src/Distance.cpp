@@ -26,7 +26,7 @@ Distance::Distance(const Key& k1, const Key& k2)
     if(i!=NBYTE)
     {
         uint8_t index = calculate_distance(res);
-        Distance::distance = REVERSE_DISTANCE-((8*i)+index);
+        Distance::distance = REVERSE_DISTANCE-((8*i)+index);  
     }
     else
         Distance::distance = 0;

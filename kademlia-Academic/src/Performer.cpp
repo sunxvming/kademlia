@@ -153,13 +153,17 @@ static void* execute(void* this_class)
         bool isAnswer = flags & FLAG_ANSWER;
         if(sender!=me)
         {
-            logger->logFile("ssnsf", LOGGER_INCOMING,
+            logger->logStdout("ssnsf", LOGGER_INCOMING,
             "Message from", &sender, "with flags:", &flags);
-            logger->logStdout("sn","Received a message from", &sender);
+            // logger->logStdout("sn","Received a message from", &sender);
         }
         else
+        {
             //waiting for pending nodes
-            ;
+            //SearchNode clean的时候，自己跟自己发送的消息
+            logger->logStdout("ssnsf", LOGGER_INCOMING,
+            "Message from me", &sender, "with flags:", &flags);
+        }
         switch(flags & RPC_MASK)
         {
             case RPC_PING :
@@ -221,7 +225,7 @@ static void* execute(void* this_class)
                     //find closest nodes
                     Kbucket kbucket;
                     p->neighbours->findKClosestNodes(&key, &kbucket);
-//                    kbucket.print();
+                   kbucket.print();
                     Message msg = generate_find_node_answer(&key, &kbucket);
                     msg.setFlags(msg.getFlags()|(flags&~RPC_MASK));   //或上其他的除RPC_MASK之外的flag
                     messenger->sendMessage(sender, msg);
