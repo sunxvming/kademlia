@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Endpoint &mdash; Kademlia C++  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="First Session" href="first_session.html" />
+    <link rel="prev" title="Bootstraper" href="../examples/bootstrap.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Kademlia C++
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Overview</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../overview/concept.html">Concept</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/walkthrough.html">Walk-through</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../overview/installation.html">Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Examples</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../examples/cli.html">Command Line Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/bootstrap.html">Bootstraper</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Endpoint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="first_session.html">First Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="session.html">Session</a></li>
+<li class="toctree-l1"><a class="reference internal" href="error.html">Error</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Kademlia C++</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Endpoint</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/endpoint.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="endpoint">
+<h1>Endpoint<a class="headerlink" href="#endpoint" title="Permalink to this headline">¶</a></h1>
+<p><strong>#include &lt;kademlia/endpoint.hpp&gt;</strong></p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpointE">
+<span id="_CPPv3N8kademlia8endpointE"></span><span id="_CPPv2N8kademlia8endpointE"></span><span id="kademlia::endpoint"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">kademlia</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">endpoint</span></span></span><a class="headerlink" href="#_CPPv4N8kademlia8endpointE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Represents a network enpoint.</p>
+<p>This class is used to:</p>
+<ul class="simple">
+<li><p>Provide the bootstraping participant <strong>address</strong> to the <a class="reference internal" href="session.html#_CPPv4N8kademlia7sessionE" title="kademlia::session"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">session</span></code></a></p></li>
+<li><p>Define the listening address(es) of a <a class="reference internal" href="first_session.html#_CPPv4N8kademlia13first_sessionE" title="kademlia::first_session"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">first_session</span></code></a> &amp;
+<a class="reference internal" href="session.html#_CPPv4N8kademlia7sessionE" title="kademlia::session"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">session</span></code></a> instance</p></li>
+</ul>
+<p class="rubric">Constructors</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint8endpointEv">
+<span id="_CPPv3N8kademlia8endpoint8endpointEv"></span><span id="_CPPv2N8kademlia8endpoint8endpointEv"></span><span id="kademlia::endpoint::endpoint__void"></span><span class="sig-name descname"><span class="n"><span class="pre">endpoint</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint8endpointEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct an unitialized endpoint.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint8endpointERK12address_typeRK12service_type">
+<span id="_CPPv3N8kademlia8endpoint8endpointERK12address_typeRK12service_type"></span><span id="_CPPv2N8kademlia8endpoint8endpointERK12address_typeRK12service_type"></span><span id="kademlia::endpoint::endpoint__address_typeCR.service_typeCR"></span><span class="sig-name descname"><span class="n"><span class="pre">endpoint</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8kademlia8endpoint12address_typeE" title="kademlia::endpoint::address_type"><span class="n"><span class="pre">address_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span>, <a class="reference internal" href="#_CPPv4N8kademlia8endpoint12service_typeE" title="kademlia::endpoint::service_type"><span class="n"><span class="pre">service_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">service</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint8endpointERK12address_typeRK12service_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs an endpoint from an <strong>address</strong> and a port <strong>service</strong> identifier.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint8endpointERK12address_typeRK20service_numeric_type">
+<span id="_CPPv3N8kademlia8endpoint8endpointERK12address_typeRK20service_numeric_type"></span><span id="_CPPv2N8kademlia8endpoint8endpointERK12address_typeRK20service_numeric_type"></span><span id="kademlia::endpoint::endpoint__address_typeCR.service_numeric_typeCR"></span><span class="sig-name descname"><span class="n"><span class="pre">endpoint</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8kademlia8endpoint12address_typeE" title="kademlia::endpoint::address_type"><span class="n"><span class="pre">address_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span>, <a class="reference internal" href="#_CPPv4N8kademlia8endpoint20service_numeric_typeE" title="kademlia::endpoint::service_numeric_type"><span class="n"><span class="pre">service_numeric_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">service</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint8endpointERK12address_typeRK20service_numeric_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Constructs an endpoint from an <strong>address</strong> and a port <strong>service</strong> identifier.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8kademlia8endpoint7addressEv">
+<span id="_CPPv3NK8kademlia8endpoint7addressEv"></span><span id="_CPPv2NK8kademlia8endpoint7addressEv"></span><span id="kademlia::endpoint::address__voidC"></span><a class="reference internal" href="#_CPPv4N8kademlia8endpoint12address_typeE" title="kademlia::endpoint::address_type"><span class="n"><span class="pre">address_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8kademlia8endpoint7addressEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the <strong>address</strong> of the enpoint.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint7addressERK12address_type">
+<span id="_CPPv3N8kademlia8endpoint7addressERK12address_type"></span><span id="_CPPv2N8kademlia8endpoint7addressERK12address_type"></span><span id="kademlia::endpoint::address__address_typeCR"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8kademlia8endpoint12address_typeE" title="kademlia::endpoint::address_type"><span class="n"><span class="pre">address_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint7addressERK12address_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the <strong>address</strong> of the enpoint.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK8kademlia8endpoint7serviceEv">
+<span id="_CPPv3NK8kademlia8endpoint7serviceEv"></span><span id="_CPPv2NK8kademlia8endpoint7serviceEv"></span><span id="kademlia::endpoint::service__voidC"></span><a class="reference internal" href="#_CPPv4N8kademlia8endpoint12service_typeE" title="kademlia::endpoint::service_type"><span class="n"><span class="pre">service_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">service</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK8kademlia8endpoint7serviceEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Get the <strong>service</strong> of the enpoint.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint7serviceERK12service_type">
+<span id="_CPPv3N8kademlia8endpoint7serviceERK12service_type"></span><span id="_CPPv2N8kademlia8endpoint7serviceERK12service_type"></span><span id="kademlia::endpoint::service__service_typeCR"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">service</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N8kademlia8endpoint12service_typeE" title="kademlia::endpoint::service_type"><span class="n"><span class="pre">service_type</span></span></a><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">service</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint7serviceERK12service_type" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Set the <strong>service</strong> of the enpoint.</p>
+</dd></dl>
+
+<p class="rubric">Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint12address_typeE">
+<span id="_CPPv3N8kademlia8endpoint12address_typeE"></span><span id="_CPPv2N8kademlia8endpoint12address_typeE"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint12address_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Represents an address.</p>
+<p>It can be:</p>
+<ul class="simple">
+<li><p>An IPv4 (e.g. <span class="cpp-expr sig sig-inline cpp"><span class="s">&quot;192.168.1.1&quot;</span></span>)</p></li>
+<li><p>An IPv6 (e.g. <span class="cpp-expr sig sig-inline cpp"><span class="s">&quot;2001:0db8:85a3:0000:0000:8a2e:0370:7334&quot;</span></span>)</p></li>
+<li><p>A hostname (e.g. <span class="cpp-expr sig sig-inline cpp"><span class="s">&quot;host-7430&quot;</span></span>)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint12service_typeE">
+<span id="_CPPv3N8kademlia8endpoint12service_typeE"></span><span id="_CPPv2N8kademlia8endpoint12service_typeE"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">service_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint12service_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Represents a port.</p>
+<p>It can be:</p>
+<ul class="simple">
+<li><p>An unsigned 16 bits integer (e.g. <span class="cpp-expr sig sig-inline cpp"><span class="s">&quot;12345&quot;</span></span>)</p></li>
+<li><p>A protocol name (e.g. <span class="cpp-expr sig sig-inline cpp"><span class="s">&quot;http&quot;</span></span>)</p></li>
+</ul>
+</dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N8kademlia8endpoint20service_numeric_typeE">
+<span id="_CPPv3N8kademlia8endpoint20service_numeric_typeE"></span><span id="_CPPv2N8kademlia8endpoint20service_numeric_typeE"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">service_numeric_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">uint16_t</span></span><a class="headerlink" href="#_CPPv4N8kademlia8endpoint20service_numeric_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Represents a port as a 16 bits unsigned integer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="rubric">Helpers</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4lsRNSt7ostreamERK8endpoint">
+<span id="_CPPv3lsRNSt7ostreamERK8endpoint"></span><span id="_CPPv2lsRNSt7ostreamERK8endpoint"></span><span id="lshift-operator__osR.endpointCR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&lt;&lt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ostream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">out</span></span>, <span class="n"><span class="pre">endpoint</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4lsRNSt7ostreamERK8endpoint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Print the endpoint <strong>e</strong> string representation into the stream <strong>out</strong>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4rsRNSt7istreamER8endpoint">
+<span id="_CPPv3rsRNSt7istreamER8endpoint"></span><span id="_CPPv2rsRNSt7istreamER8endpoint"></span><span id="rshift-operator__isR.endpointR"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;&gt;</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">istream</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">in</span></span>, <span class="n"><span class="pre">endpoint</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">e</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4rsRNSt7istreamER8endpoint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Parse the endpoint <strong>e</strong> string representation from the stream <strong>in</strong>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4eqRK8endpointRK8endpoint">
+<span id="_CPPv3eqRK8endpointRK8endpoint"></span><span id="_CPPv2eqRK8endpointRK8endpoint"></span><span id="eq-operator__endpointCR.endpointCR"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">==</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">endpoint</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">endpoint</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4eqRK8endpointRK8endpoint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compare endpoints <strong>a</strong> &amp; <strong>b</strong> for equality.</p>
+<p>Return <span class="cpp-expr sig sig-inline cpp"><span class="k">true</span></span> if they are equal, <span class="cpp-expr sig sig-inline cpp"><span class="k">false</span></span> otherwise</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4neRK8endpointRK8endpoint">
+<span id="_CPPv3neRK8endpointRK8endpoint"></span><span id="_CPPv2neRK8endpointRK8endpoint"></span><span id="neq-operator__endpointCR.endpointCR"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">!=</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">endpoint</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <span class="n"><span class="pre">endpoint</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4neRK8endpointRK8endpoint" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Compare endpoints <strong>a</strong> &amp; <strong>b</strong> for inequality.</p>
+<p>Return <span class="cpp-expr sig sig-inline cpp"><span class="k">true</span></span> if they aren’t equal, <span class="cpp-expr sig sig-inline cpp"><span class="k">false</span></span> otherwise</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="first_session.html" class="btn btn-neutral float-right" title="First Session" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../examples/bootstrap.html" class="btn btn-neutral float-left" title="Bootstraper" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, David Keller.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
