@@ -377,7 +377,7 @@ private:
     {
         // Initial peer should know our neighbors, hence ask
         // him which peers are close to our own id.
-        auto endoints_to_query = network_.resolve_endpoint( initial_peer );
+        auto endoints_to_query = network_.resolve_endpoint( initial_peer );  //返回的是一个vector
 
         auto on_discovery = [ this, on_initialized ]
             ( std::error_code const& failure )

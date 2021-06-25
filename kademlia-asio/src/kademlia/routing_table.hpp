@@ -59,7 +59,7 @@ public:
     enum { DEFAULT_K_BUCKET_SIZE = 20 };
 
     ///
-    using peer_type = PeerType;
+    using peer_type = PeerType;   //type is ip_endpoint
 
     ///
     using value_type = std::pair< id, peer_type >;
@@ -124,11 +124,11 @@ public:
                 << new_peer << "' as '"
                 << peer_id << "'." << std::endl;
 
-        auto k_bucket_index = find_k_bucket_index( peer_id );
+        auto k_bucket_index = find_k_bucket_index( peer_id );   // 从左算有几个相同的bit， 0最远，159最近
         auto & bucket = k_buckets_[ k_bucket_index ];
 
-        // If there is room in the bucket.
-        if ( bucket.size() == k_bucket_size_ )
+        // If there is room in the bucket.  why???
+        if ( bucket.size() == k_bucket_size_ )  // k_bucket_size_ size is 20
         {
             update_largest_k_bucket_index( k_bucket_index );
 
@@ -142,10 +142,10 @@ public:
         auto is_peer_known = [ &peer_id ] ( value_type const& entry )
         { return entry.first == peer_id; };
 
-        if ( std::find_if( bucket.begin(), end, is_peer_known ) != end )
+        if ( std::find_if( bucket.begin(), end, is_peer_known ) != end )  // id in the bucket
             return false;
 
-        bucket.insert( end, value_type{ peer_id, new_peer } );
+        bucket.insert( end, value_type{ peer_id, new_peer } );   
         ++ peer_count_;
 
         return true;
@@ -320,7 +320,7 @@ private:
     id const my_id_;
     /// Keep a track of peer count to make size() complexity O(1).
     std::size_t peer_count_;
-    /// This is max number of peers stored per k_bucket.
+    /// This is max number of peers stored per k_bucket. size is 20
     std::size_t k_bucket_size_;
     /// This keeps the index of the largest subtree.
     std::size_t largest_k_bucket_index_;

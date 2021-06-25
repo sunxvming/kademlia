@@ -36,7 +36,7 @@ struct first_session::impl final
         : detail::session_impl
 {
     /**
-     *
+     *  私有内部类，使代码更具封装性
      */
     impl
         ( endpoint const& listen_on_ipv4

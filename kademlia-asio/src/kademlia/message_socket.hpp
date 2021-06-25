@@ -347,7 +347,7 @@ message_socket< UnderlyingSocketType >::resolve_endpoint
     typename protocol_type::resolver::query q{ e.address(), e.service(), f };
     // One raw endpoint (e.g. localhost) can be resolved to
     // multiple endpoints (e.g. IPv4 / IPv6 address).
-    resolved_endpoints endpoints;
+    resolved_endpoints endpoints;        // resolved_endpoints类型为ip_endpoint
 
     auto i = r.resolve( q );
     for ( decltype( i ) end; i != end; ++i )

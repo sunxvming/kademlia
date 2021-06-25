@@ -118,7 +118,7 @@ public:
                                                             , on_error );
         };
 
-        // Serialize the request and send it.
+        // Serialize the request and send it. on_request_sent will be call on send compele
         network_.send( message, e, on_request_sent );
     }
 
