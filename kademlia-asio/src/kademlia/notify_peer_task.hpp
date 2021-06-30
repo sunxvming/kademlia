@@ -69,7 +69,7 @@ public:
         c.reset( new notify_peer_task( key, tracker
                                      , routing_table, on_finish ) );
 
-        try_to_notify_neighbors( c );
+        try_to_notify_neighbors( c );  // 生命周期超过了这个函数的作用域，故用智能指针
     }
 
 private:

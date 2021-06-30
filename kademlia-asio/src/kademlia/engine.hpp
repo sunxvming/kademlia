@@ -229,7 +229,7 @@ private:
                 handle_find_value_request( sender, h, i, e );
                 break;
             default:
-                tracker_.handle_new_response( sender, h, i, e );
+                tracker_.handle_new_response( sender, h, i, e );  // 专门处理响应的
                 break;
         }
     }
@@ -402,7 +402,7 @@ private:
     {
         // Find our closest neighbor.
         auto closest_neighbor = routing_table_.find( my_id_ );
-        if ( closest_neighbor->first == my_id_ )
+        if ( closest_neighbor->first == my_id_ )  //排除掉自己
             ++ closest_neighbor;
 
         assert( closest_neighbor != routing_table_.end()
@@ -439,7 +439,7 @@ private:
         auto refresh_id = my_id_;
         while ( i )
         {
-            refresh_id[ i ] = ! refresh_id[ i ];
+            refresh_id[ i ] = ! refresh_id[ i ];  //相当于把距离自己id的距离由近到远的id发送FIND_PEER_REQUEST，以从其他节点获取由近到远的范围内的所有节点
             start_notify_peer_task( refresh_id
                                   , tracker_, routing_table_
                                   , on_notification_complete );
@@ -471,7 +471,7 @@ private:
 
         routing_table_.push( h.source_id_, sender );
 
-        process_new_message( sender, h, i, e );
+        process_new_message( sender, h, i, e );  //i,e now point to body
     }
 
 private:

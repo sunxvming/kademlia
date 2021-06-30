@@ -265,7 +265,7 @@ lookup_task::add_candidate
 
     auto const d = distance( p.id_, key_ );
     candidate const c{ p, candidate::STATE_UNKNOWN };
-    candidates_.emplace( d, c );
+    candidates_.emplace( d, c );   //若存在，emplace插入不会成功,每一个距离只放一个节点
 }
 
 inline lookup_task::candidates_type::iterator

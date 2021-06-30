@@ -111,7 +111,7 @@ timer::expires_from_now
 
     // If the current expiration time will be the sooner to expires
     // then cancel any pending wait and schedule this one instead.
-    if ( timeouts_.empty() || expiration_time < timeouts_.begin()->first )
+    if ( timeouts_.empty() || expiration_time < timeouts_.begin()->first )   //timeouts_ is a map, it key is order by time ascend
         schedule_next_tick( expiration_time );
 
     timeouts_.emplace( expiration_time, on_timer_expired );
