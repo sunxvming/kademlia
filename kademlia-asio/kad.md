@@ -269,6 +269,9 @@ routing_table
 constants
     定义的常量
     
+    
+    
+    
 
 # 工具类
 --------------------
@@ -281,7 +284,6 @@ timer
 concurrent_guard
     并发执行同一个函数的guard，提供保证同一时间只能运行一个实例
     实现方式：其实就是对atomic_flag的一个RAII的封装
-    
     
 
 
@@ -354,11 +356,12 @@ network对象构造时调用 start_message_reception()
 
     
 ### 如何发送
-
-
-
-### 缓冲区如何处理
-
+主要是调用tracker对象的send_request方法
+```
+task->tracker_.send_request()
+    network_.send( message, e, on_request_sent );
+        get_socket_for( e ).async_send( message, e, on_message_sent ); 
+```
 
 
 ## kad协议

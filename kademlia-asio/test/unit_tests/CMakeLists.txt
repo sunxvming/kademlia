@@ -23,7 +23,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Run all tests, timeouting if it takes more than 30 seconds.
+# Run all tests, timeouting if it takes more than 30 seconds. 
+# the target unit_tests will execute `ctest --output-on-failure --timeout 30`
+# ctest会执行add_test中添加的test
 add_custom_target(unit_tests COMMAND ${CMAKE_CTEST_COMMAND} --output-on-failure --timeout 30)
 add_dependencies(check unit_tests)
 
@@ -117,7 +119,7 @@ if(ENABLE_COVERAGE)
     if (NOT LCOV OR NOT GENHTML)
         message(FATAL_ERROR "Can't find lcov tool(s)")
     endif()
-
+    # ${CMAKE_COMMAND} : /usr/bin/cmake3 
     add_custom_target(coverage
         COMMAND
             ${LCOV} --quiet --output-file app_base.info --initial --capture --directory . --gcov-tool ${GCOV}
