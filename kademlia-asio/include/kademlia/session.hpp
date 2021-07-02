@@ -77,7 +77,7 @@ public:
         , DataType const& data
         , save_handler_type handler )
     {
-        async_save( key_type{ std::begin( key ), std::end( key ) }
+        async_save( key_type{ std::begin( key ), std::end( key ) }        //string转std::vector< std::uint8_t >
                   , data_type{ std::begin( data ), std::end( data ) }
                   , std::move( handler ) );
     }

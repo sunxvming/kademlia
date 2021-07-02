@@ -61,7 +61,7 @@ save( k::session & session
             std::cout << "Saved \"" << key << "\"" << std::endl;
     };
 
-    session.async_save( key, value, std::move( on_save ) );
+    session.async_save( key, value, std::move( on_save ) );  // 回调函数方式的响应处理让逻辑处理的方式显得很自然,作为接口的话还可以对外提供很高的灵活性
 
 }
 

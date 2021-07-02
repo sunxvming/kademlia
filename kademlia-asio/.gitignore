@@ -1,6 +1,7 @@
 # Ignore vim stuff
 *.swp
 build/*
+build_cov/
 .DS_Store
 
 boost/

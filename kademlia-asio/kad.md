@@ -3,9 +3,9 @@
 ## 程序启动
 ```
 在build/examples目录下
-./kademlia_bootstrap 9000
-./kademlia_cli 9001 127.0.0.1:9000
-./kademlia_cli 9002 127.0.0.1:9000
+节点1：./kademlia_bootstrap 9000
+节点2：./kademlia_cli 9001 127.0.0.1:9000
+节点3：./kademlia_cli 9002 127.0.0.1:9000
 ```
 
 
@@ -42,7 +42,7 @@ engine
         network_
         my_id_
         routing_table_
-        value_store_
+        value_store_   存储key-value的地方
     主要方法
         process_new_message()  根据相应的消息类型进行具体的逻辑处理
             handle_ping_request()
@@ -54,8 +54,16 @@ engine
             反序列化网络消息成detail::header对象，deserialize()
             并交由 process_new_message()处理
         async_save()
+            session_impl::async_save()
+                engine_.async_save()
+                    start_store_value_task() 
+                        见store_value_task
         async_load()
-        
+            session_impl::async_load()
+                engine_.async_load()
+                    start_find_value_task() 
+                        try_candidates()
+                        见find_value_task
         
         discover_neighbors() 初始启动时连接initial_peer并发现节点
             start_discover_neighbors_task()
@@ -132,6 +140,11 @@ message_socket
             create_underlying_socket()
                 创建asio的socket对象并绑定指定的端口
 
+
+buffer
+    using buffer = std::vector< std::uint8_t >
+
+
 message
     代表一个网络消息
     协议的结构定义在这里
@@ -168,23 +181,58 @@ discover_neighbors_task
         主要功能时发送FIND_PEER_REQUEST协议
     handle_initial_contact_response()
         处理节点响应，这个方法的回调注册是放在接收完对方回复后
-
+    
+    主要逻辑：
+        向自己的指定的节点发送FIND_PEER_REQUEST协议获取跟自己id最接近的节点
 
 notify_peer_task:lookup_task
-    discover_neighbors_task完成后开启notify_peer_task
-    
-    用在首次发现节点后，再向其他节点发送FIND_PEER_REQUEST以获取更多的节点，然后把自己的k-bucket添满
+    执行时机:discover_neighbors_task完成后开启notify_peer_task
+    主要作用：用在首次发现节点后，再向其他节点发送FIND_PEER_REQUEST以获取更多的节点，然后把自己的k-bucket添满
     
     start_notify_peer_task()
         notify_peer_task::start()
             try_to_notify_neighbors()
                 send_notify_peer_request()    发送的是find_peer_request协议
+    主要逻辑：
+        把距离自己id的距离由近到远的id发送FIND_PEER_REQUEST，以从其他节点获取由近到远的范围内的所有节
+        这个最多会开启160个notify_peer_task，以填满自己的k-bucket
+        
+store_value_task:lookup_task
+    保存某个值到其他节点上，比如保存 的key=>key1 value=>aaaa
+    和notify_peer_task类似，只不过找寻的key为id(key)
+    发送的协议为：find_peer_request
+    
+    主要逻辑：
+        根据key算出key的id
+        查找本节点里此id最近的节点
+        向这些节点发送find_peer_request
+        其他节点返回他们节点上最接近的key值的节点
+        本节点把返回的节点加入到candidates候选节点列表中
+        继续从candidates候选节点列表中选择节点发送find_peer_request
+        直到最终candidates候选列表中的节点都已经被探测过之后停止find_peer_request
+        最后从candidates候选列表中选择离id最近的节点发送STORE_REQUEST请求
+        收到STORE_REQUEST请求的节点把k-v保存在本节点
+        
+find_value_task:lookup_task
+    根据key在网络中找到相应的value值
+    发送的协议为：find_value_request
 
-store_value_task
-
-find_value_task
-
+    主要逻辑：
+        根据key算出key的id
+        查找本节点里此id最近的节点
+        向这些节点发送find_value_request
+        其他节点接收到find_value_request请求后
+            节点查找到key
+                发送find_value_response_body响应，即返回离key最接近的节点
+            节点未查到到key
+                发送send_find_peer_response，即查找到的值
+        本节点根据返回的响应的类型分别进行不同的处理
+            若为：find_value_response_body
+                说明对应的key找到了，然后可以进行相应的逻辑处理了
+            若为：send_find_peer_response
+                把返回的peer加入到candidates候选列表中继续try_candidates()
 lookup_task
+    上述除discover_neighbors_task外的task都继承了lookup_task
     寻找某个id或key时，维护着请求节点的状态
     
     探索的节点的状态：
@@ -192,8 +240,9 @@ lookup_task
         STATE_CONTACTED    已发送
         STATE_RESPONDED    发送并接收
         STATE_TIMEOUTED    超时
-
-
+    主要保存的数据结构
+        std::map< id, candidate > candidates
+        存的结果是按和目标的key距离排序的
 
 # kad协议相关
 ------------------ 
@@ -215,6 +264,11 @@ routing_table
         因为k_buckets是一个二维的结构，所有遍历它需要自定义一个迭代器
         通过这个迭代器可以遍历所有k-bucket中的所有id
 
+# 其他
+-------------------------
+constants
+    定义的常量
+    
 
 # 工具类
 --------------------
@@ -223,23 +277,33 @@ timer
     timeouts timeouts_;     超时的回调函数
     deadline_timer timer_;  asio的底层timer实现
     
+
+concurrent_guard
+    并发执行同一个函数的guard，提供保证同一时间只能运行一个实例
+    实现方式：其实就是对atomic_flag的一个RAII的封装
     
+    
+
+
 ```
 
 
 ## 网络相关内容
 
 ### 所有协议
-    PING_REQUEST
-    PING_RESPONSE
-    STORE_REQUEST
-    FIND_PEER_REQUEST
-        本节点请求指定id，其他节点返回k-close-bucket
-    FIND_PEER_RESPONSE
-    FIND_VALUE_REQUEST
-    FIND_VALUE_RESPONSE
+
+* PING_REQUEST
+* PING_RESPONSE
+* STORE_REQUEST
+* FIND_PEER_REQUEST
+本节点请求指定id，其他节点返回k-close-bucket
+* FIND_PEER_RESPONSE
+回复最接近请求id的k个节点
+* FIND_VALUE_REQUEST
+* FIND_VALUE_RESPONSE
 
 ### 消息体结构
+```
 header + body
 header = version + type + source_id + random_token
 
@@ -251,7 +315,7 @@ body：
     find_value_request_body
     find_value_response_body
     store_value_request_body
-
+```
 
 
 ### 网络消息如何监听
@@ -262,8 +326,8 @@ bind地址和端口号
 
 ### 网络消息如何接收
 network对象构造时调用 start_message_reception()
-message_socket::async_receive()
-ip::udp::socket::async_receive_from()
+再调用message_socket::async_receive()
+最后调用boost的ip::udp::socket::async_receive_from()
 
 
 ### 初次启动如何发现节点

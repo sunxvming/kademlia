@@ -128,48 +128,48 @@ TEST(Message,craftedSender)
     EXPECT_TRUE(n.getPort() == 6840);
 }
 
-TEST(Messenger,sendAndReceive)
-{
-    Messenger* m = &(Messenger::getInstance());
-    std::queue<Message*> q;
-    m->init(&q,3400,true);
-    sleep(1);
-    Message msg("YM1Xc7G2RTs5mU6QCJcb");
-    Node me(m->getIp(),m->getPort());
-    m->sendMessage(me, msg);
-    sleep(1);
-    if(q.size())
-    {
-        Message* extracted = q.front();
-        q.pop();
-        EXPECT_TRUE(strcmp(msg.getText(),extracted->getText())==0);
-        delete extracted;
-    }
-    else
-        EXPECT_TRUE(false);
-}
+// TEST(Messenger,sendAndReceive)
+// {
+//     Messenger* m = &(Messenger::getInstance());
+//     std::queue<Message*> q;
+//     m->init(&q,3400,true);
+//     sleep(1);
+//     Message msg("YM1Xc7G2RTs5mU6QCJcb");
+//     Node me(m->getIp(),m->getPort());
+//     m->sendMessage(me, msg);
+//     sleep(1);
+//     if(q.size())
+//     {
+//         Message* extracted = q.front();
+//         q.pop();
+//         EXPECT_TRUE(strcmp(msg.getText(),extracted->getText())==0);
+//         delete extracted;
+//     }
+//     else
+//         EXPECT_TRUE(false);
+// }
 
-TEST(Messenger,sendAndReceiveCorrectPort)
-{
-    Messenger* m = &(Messenger::getInstance());
-    std::queue<Message*> q;
-    m->init(&q,3400,true);
-    m->setPrivate();
-    Message msg("4Ai5KtYOoKeDkLCWYFj6");
-    m->sendMessage(Node(m->getIp(), 3400), msg);
-    sleep(1);
-    if(q.size())
-    {
-        Message* extracted = q.front();
-        q.pop();
-        EXPECT_TRUE(strcmp(msg.getText(),extracted->getText())==0);
-        EXPECT_EQ(extracted->getSenderNode().getIp(),m->getIp());
-        EXPECT_EQ(extracted->getSenderNode().getPort(),m->getPort());
-        delete extracted;
-    }
-    else
-        EXPECT_TRUE(false);
-}
+// TEST(Messenger,sendAndReceiveCorrectPort)
+// {
+//     Messenger* m = &(Messenger::getInstance());
+//     std::queue<Message*> q;
+//     m->init(&q,3400,true);
+//     m->setPrivate();
+//     Message msg("4Ai5KtYOoKeDkLCWYFj6");
+//     m->sendMessage(Node(m->getIp(), 3400), msg);
+//     sleep(1);
+//     if(q.size())
+//     {
+//         Message* extracted = q.front();
+//         q.pop();
+//         EXPECT_TRUE(strcmp(msg.getText(),extracted->getText())==0);
+//         EXPECT_EQ(extracted->getSenderNode().getIp(),m->getIp());
+//         EXPECT_EQ(extracted->getSenderNode().getPort(),m->getPort());
+//         delete extracted;
+//     }
+//     else
+//         EXPECT_TRUE(false);
+// }
 
 TEST(Message,setData)
 {

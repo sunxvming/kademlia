@@ -229,7 +229,7 @@ lookup_task::select_closest_valid_candidates
         ; ++ i )
     {
         if ( i->second.state_ == candidate::STATE_RESPONDED )
-            candidates.push_back( i->second.peer_ );
+            candidates.push_back( i->second.peer_ );      //candidates_的结构为map，节点的距离是由近到远的
     }
 
     return candidates;
@@ -263,9 +263,9 @@ lookup_task::add_candidate
     LOG_DEBUG( lookup_task, this )
             << "adding '" << p << "'." << std::endl;
 
-    auto const d = distance( p.id_, key_ );
+    auto const d = distance( p.id_, key_ );   //计算的结果是一个id值，前边相同的bit经过xor后就成0了，距离越近xor结果约小
     candidate const c{ p, candidate::STATE_UNKNOWN };
-    candidates_.emplace( d, c );   //若存在，emplace插入不会成功,每一个距离只放一个节点
+    candidates_.emplace( d, c );   //若存在，emplace插入不会成功
 }
 
 inline lookup_task::candidates_type::iterator

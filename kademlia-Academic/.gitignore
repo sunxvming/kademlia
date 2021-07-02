@@ -12,5 +12,4 @@ build*/
 .dep.inc
 nbproject/
 dist/
-tests/*.cxx
 xct/
