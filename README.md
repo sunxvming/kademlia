@@ -11,14 +11,14 @@ Kademlia是一种分布式存储及路由的算法，主要用来实现p2p分布
 
 在阅读这两个项目的的时候做了关于其代码的笔记，主要包括以下内容：
 
-* 程序启动和运行
+* 程序的启动和运行
 * 主要的实现类
 * 程序启动后开启的线程
 * 代码中关于kad协议的定义
-* kad各个协议实现的逻辑和流程
+* kad各个协议实现的逻辑和交互流程
 
 
 笔记的内容分别存放在这两个代码目录下的README.md中:
 
-* [kademlia-Academic|readme](kademlia-Academic/README.md)
-* [kademlia-asio|readme](kademlia-asio/README.md)
+* [kademlia-Academic|代码讲解](kademlia-Academic/README.md)
+* [kademlia-asio|代码讲解](kademlia-asio/README.md)
